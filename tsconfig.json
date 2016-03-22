@@ -5,5 +5,10 @@
         "noImplicitAny": true,
         "suppressImplicitAnyIndexErrors": true,
         "target": "ES6"
-    }
+    },
+    "exclude": [
+      "node_modules",
+      "typings/browser",
+      "typings/browser.d.ts"
+    ]
 }
