@@ -7,6 +7,9 @@ node_modules:
 typings/main.d.ts: ./typings.json | node_modules
 	./node_modules/.bin/typings install
 
+lint: | node_modules
+	./node_modules/.bin/tslint -c tslint.json src/*.ts src/*/*.ts
+
 clean:
 	rm -rf ./build/
 

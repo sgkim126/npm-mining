@@ -1,7 +1,7 @@
-import * as fs from 'fs'
-import * as path from 'path'
-import IProject from './iproject'
-import newPromise from './newPromise.ts'
+import * as fs from 'fs';
+import * as path from 'path';
+import IProject from './iproject';
+import newPromise from './newPromise.ts';
 
 export default function saveMetadata(dirname: string, map: Map<string, IProject[]>, updated: number): Promise<any> {
   return newPromise(fs.exists, fs, dirname)
@@ -18,7 +18,7 @@ export default function saveMetadata(dirname: string, map: Map<string, IProject[
     }
     return Promise.all(waits);
   }).then(() => {
-    return writeUpdated(dirname, updated)
+    return writeUpdated(dirname, updated);
   });
 }
 

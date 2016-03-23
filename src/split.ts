@@ -6,7 +6,7 @@ import saveMetadata from './lib/saveMetadata.ts';
   const out_dir: string = process.argv[3];
 
   if (process.argv.length !== 4) {
-    console.error('Usage :')
+    console.error('Usage :');
     console.error(`\tnode ${process.argv[1]} {input file name} {output directory}`);
     process.exit(-1);
   }
