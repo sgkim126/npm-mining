@@ -3,33 +3,41 @@ TESTS_SRC := $(shell ls src/test/*.ts)
 TESTS := $(patsubst src/%.ts, build/%.js, $(TESTS_SRC))
 .PRECIOUS: $(TESTS_SRC) $(TESTS)
 
-split: | typings/main.d.ts
-	./node_modules/.bin/webpack --entry ./src/split.ts --output-filename ./$@.js
+MOCHA := ./node_modules/.bin/mocha
+WEBPACK := ./node_modules/.bin/webpack
+TYPINGS := ./node_modules/.bin/typings
+TSLINT := ./node_modules/.bin/tslint
+NPM := $(shell which npm)
+NODE := $(shell which node)
+RM := $(shell which rm)
+WGET := $(shell which wget)
+
+split: build/split.js
 
 test: $(TESTS)
-	./node_modules/.bin/mocha $^
+	$(MOCHA) $^
 
-build/test/%.js: src/test/%.ts $(LIB_SRC)
-	./node_modules/.bin/webpack --entry ./$< --output-path $(@D) --output-filename $(@F)
+build/%.js: src/%.ts $(LIB_SRC) | typings/main.d.ts
+	$(WEBPACK) --entry ./$< --output-path $(@D) --output-filename $(@F)
 
-node_modules:
-	npm install
+node_modules: package.json
+	$(NPM) install
 
-typings/main.d.ts: ./typings.json | node_modules
-	./node_modules/.bin/typings install
+typings/main.d.ts: typings.json | node_modules
+	$(TYPINGS) install
 
 lint: | node_modules
-	./node_modules/.bin/tslint -c tslint.json src/*.ts src/*/*.ts
+	$(TSLINT) -c tslint.json src/*.ts src/*/*.ts
 
 clean:
-	rm -rf ./build/
+	$(RM) -rf ./build/
 
 distclean: | clean
-	rm -rf ./node_modules/
-	rm -rf ./typings/
+	$(RM) -rf ./node_modules/
+	$(RM) -rf ./typings/
 
 ./data/all.json:
-	wget https://registry.npmjs.org/-/all -O $@
+	$(WGET) https://registry.npmjs.org/-/all -O $@
 
-./data/out/: ./data/all.json | split
-	node ./build/split.js $< $@
+./data/out/: ./build/split.js ./data/all.json
+	$(NODE) $^ $@
