@@ -29,5 +29,5 @@ function writeUpdated(dirname: string, updated: number): Promise<any> {
 }
 
 function writeFile(filename: string, projects: IProject[]): Promise<any> {
-  return newPromise(fs.writeFile, fs, JSON.stringify(projects), 'utf-8');
+  return newPromise(fs.writeFile, fs, filename, JSON.stringify(projects), 'utf-8');
 }
