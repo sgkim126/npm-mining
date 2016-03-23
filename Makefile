@@ -36,7 +36,10 @@ distclean: | clean
 	$(RM) -rf ./node_modules/
 	$(RM) -rf ./typings/
 
-./data/all.json:
+./data:
+	mkdir data
+
+./data/all.json: | data
 	$(WGET) https://registry.npmjs.org/-/all -O $@
 
 ./data/out/: ./build/split.js ./data/all.json
